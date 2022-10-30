@@ -1,0 +1,147 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "collapsed_sections": [],
+      "authorship_tag": "ABX9TyMHnctNAcLJV+JkAtBM5vl7"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 11,
+      "metadata": {
+        "id": "dAS8_XMfe4v6"
+      },
+      "outputs": [],
+      "source": [
+        "import torch"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X = torch.tensor([1.0, 3.0, 2.0])\n",
+        "Y = torch.tensor([2.0, 6.0, 4.0])\n",
+        "w = torch.tensor(0.0, requires_grad=True)"
+      ],
+      "metadata": {
+        "id": "AbI-L88uhwzm"
+      },
+      "execution_count": 32,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def forward(x):\n",
+        "  return x * w"
+      ],
+      "metadata": {
+        "id": "xGrLfCI3h6qG"
+      },
+      "execution_count": 33,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def loss(y_pred, y):\n",
+        "  return ((y_pred - y)**2).mean() # MSE - Mean Squared Error"
+      ],
+      "metadata": {
+        "id": "FaX3yTIxiDjY"
+      },
+      "execution_count": 34,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def gradient(x, y, y_pred):\n",
+        "  return torch.dot(2*x, y_pred-y).mean()"
+      ],
+      "metadata": {
+        "id": "_T3q2LWxiN2Y"
+      },
+      "execution_count": 35,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "n_epochs = 1000\n",
+        "lr = 0.01"
+      ],
+      "metadata": {
+        "id": "r2-vff2CipoX"
+      },
+      "execution_count": 36,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "for epoch in range(n_epochs):\n",
+        "  y_pred = forward(X)\n",
+        "\n",
+        "  l = loss(y_pred, Y)\n",
+        "\n",
+        "  l.backward()\n",
+        "\n",
+        "  with torch.no_grad():\n",
+        "    w -= w.grad * lr\n",
+        "\n",
+        "  w.grad.zero_()\n",
+        "\n",
+        "  if epoch % 100 == 0:\n",
+        "    print(f\"Epoch: {epoch+1}, Loss: {l}, Weight: {w}\") \n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "mehJnC6wiskS",
+        "outputId": "3ee674d9-03ea-4bcd-ae6b-0e93875619a1"
+      },
+      "execution_count": 37,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch: 1, Loss: 18.66666603088379, Weight: 0.18666665256023407\n",
+            "Epoch: 101, Loss: 5.741073394460727e-08, Weight: 1.9998995065689087\n",
+            "Epoch: 201, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 301, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 401, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 501, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 601, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 701, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 801, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n",
+            "Epoch: 901, Loss: 1.8047785488306545e-12, Weight: 1.9999994039535522\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "tGACQBE9jQ0I"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
